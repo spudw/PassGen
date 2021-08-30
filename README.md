@@ -3,8 +3,6 @@
 <p>
 PassGen is tool that is used for generating passwords. Passwords are generated using a combination of a pre-shared secret key, and a shared passphrase.
 
----
-
 ## Concept
 PassGen is intended to generate passwords to be used for symmetric encryption, and provide safe means to communicate the password between parties.
 ### Here is a typical usage scenario:
@@ -27,8 +25,6 @@ Multiple parties need to exchange information securely via encrypted email attac
     <li/> The recipient(s) enter the Passphrase <b><i>[Peanut Butter and Jelly]</i></b> into PassGen.
     <li/> The generated password is used to decrypt the email attachment.
 </ol>
-
----
 
 ## Features
 
@@ -71,7 +67,5 @@ Multiple parties need to exchange information securely via encrypted email attac
     </ul>
 </ul>
 
----
-
 ## Development Log - To-Do
-Listed in no particular priority: Key Archive Listview editing and saving, Clipboard AutoPurge, Hotkeys, Autostart, About, Import / Export, Singleton / Mutex, Code Cleanup, Commandline Arguments Prep & Design, 7-zip integration
+Listed in no particular priority: Hotkeys, Autostart, About, Import / Export, Singleton / Mutex, Code Cleanup, Commandline Arguments Prep & Design, 7-zip integration
