@@ -1,0 +1,8 @@
+Hotkeys
+Autostart
+About
+Import / Export
+Singleton / Mutex
+Code Cleanup
+Commandline Arguments Prep & Design
+7-zip integration

@@ -1,0 +1,41 @@
+C:\Users\Spudw\source\repos\PassGen\PassGen\bin\Debug\PassGen.exe.config
+C:\Users\Spudw\source\repos\PassGen\PassGen\bin\Debug\PassGen.exe.manifest
+C:\Users\Spudw\source\repos\PassGen\PassGen\bin\Debug\PassGen.application
+C:\Users\Spudw\source\repos\PassGen\PassGen\bin\Debug\PassGen.exe
+C:\Users\Spudw\source\repos\PassGen\PassGen\bin\Debug\PassGen.pdb
+C:\Users\Spudw\source\repos\PassGen\PassGen\obj\Debug\PassGen.csprojAssemblyReference.cache
+C:\Users\Spudw\source\repos\PassGen\PassGen\obj\Debug\KeyManager.g.cs
+C:\Users\Spudw\source\repos\PassGen\PassGen\obj\Debug\MainGUI.g.cs
+C:\Users\Spudw\source\repos\PassGen\PassGen\obj\Debug\App.g.cs
+C:\Users\Spudw\source\repos\PassGen\PassGen\obj\Debug\PassGen_MarkupCompile.cache
+C:\Users\Spudw\source\repos\PassGen\PassGen\obj\Debug\PassGen_MarkupCompile.lref
+C:\Users\Spudw\source\repos\PassGen\PassGen\obj\Debug\KeyManager.baml
+C:\Users\Spudw\source\repos\PassGen\PassGen\obj\Debug\MainGUI.baml
+C:\Users\Spudw\source\repos\PassGen\PassGen\obj\Debug\PassGen.g.resources
+C:\Users\Spudw\source\repos\PassGen\PassGen\obj\Debug\PassGen.Properties.Resources.resources
+C:\Users\Spudw\source\repos\PassGen\PassGen\obj\Debug\PassGen.csproj.GenerateResource.cache
+C:\Users\Spudw\source\repos\PassGen\PassGen\obj\Debug\PassGen.csproj.CoreCompileInputs.cache
+C:\Users\Spudw\source\repos\PassGen\PassGen\obj\Debug\PassGen.exe.manifest
+C:\Users\Spudw\source\repos\PassGen\PassGen\obj\Debug\PassGen.application
+C:\Users\Spudw\source\repos\PassGen\PassGen\obj\Debug\PassGen.exe
+C:\Users\Spudw\source\repos\PassGen\PassGen\obj\Debug\PassGen.pdb
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\bin\Debug\PassGen.exe.config
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\bin\Debug\PassGen.exe.manifest
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\bin\Debug\PassGen.application
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\bin\Debug\PassGen.exe
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\bin\Debug\PassGen.pdb
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Debug\KeyManager.g.cs
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Debug\MainGUI.g.cs
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Debug\App.g.cs
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Debug\PassGen_MarkupCompile.cache
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Debug\PassGen_MarkupCompile.lref
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Debug\KeyManager.baml
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Debug\MainGUI.baml
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Debug\PassGen.g.resources
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Debug\PassGen.Properties.Resources.resources
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Debug\PassGen.csproj.GenerateResource.cache
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Debug\PassGen.csproj.CoreCompileInputs.cache
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Debug\PassGen.exe.manifest
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Debug\PassGen.application
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Debug\PassGen.exe
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Debug\PassGen.pdb
