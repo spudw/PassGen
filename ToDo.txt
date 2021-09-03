@@ -1,5 +1,4 @@
 Autostart
-About
 Import / Export
 Singleton / Mutex
 Code Cleanup

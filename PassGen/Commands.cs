@@ -14,7 +14,9 @@ namespace PassGen
         public static readonly RoutedCommand CmdMnuEditSelectAll = new RoutedCommand();
         public static readonly RoutedCommand CmdMnuEditDeselectAll = new RoutedCommand();
         public static readonly RoutedCommand CmdMnuViewShowKeys = new RoutedCommand();
+        public static readonly RoutedCommand CmdMnuHelpAbout = new RoutedCommand();
         public static RoutedCommand CmdMainGUIEsc = new RoutedCommand();
         public static RoutedCommand CmdKeyMgrEsc = new RoutedCommand();
+        public static RoutedCommand CmdAboutEsc = new RoutedCommand();
     }
 }

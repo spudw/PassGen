@@ -30,9 +30,9 @@ namespace PassGen
     {
         private System.Windows.Forms.NotifyIcon NotifyIcon;
         Window WinKeyMgr = new KeyManager();
-        const string sVersion = "0.1.20210903";
-        const string sTitle = "PassGen v" + sVersion;
-        //const string sTitle = "PassGen";
+        Window AboutBox = new AboutBox();
+        string sVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        const string sTitle = "PassGen";
         const string sEmptyPasshrase = "Type Passphrase Here";
         const string sPassphraseIsTooShort = "Passphrase is too short.\r\nMust contain at least 8 characters.";
         const string sCopiedToClipboard = "Copied to clipboard.";
@@ -42,7 +42,7 @@ namespace PassGen
         public MainGUI()
         {
             InitializeComponent();
-            PassGen.Title = sTitle;
+            PassGen.Title = sTitle + " v" + sVersion;
             aTimer.Tick += AutoPurge;
             PassGen_NotifyIconInit();
             PassGen_CloseToTrayInit();
@@ -562,6 +562,16 @@ namespace PassGen
             aTimer.Interval = TimeSpan.FromMinutes(iAutoPurgeTimerValue);
             aTimer.Start();
             aTimer.IsEnabled = true;
+        }
+
+        private void MnuHelpAbout_Command(object sender, RoutedEventArgs e)
+        {
+            AboutBox.Show();
+        }
+
+        private void MnuHelpAbout_Click(object sender, RoutedEventArgs e)
+        {
+            AboutBox.Show();           
         }
     }
 }

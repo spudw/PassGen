@@ -9,12 +9,13 @@
     <Window.InputBindings>
         <KeyBinding Command="{x:Static local:Commands.CmdMnuFileKeyMgr}" Modifiers="Control" Key="M"/>
         <KeyBinding Command="{x:Static local:Commands.CmdMnuFileQuit}" Modifiers="Control" Key="Q"/>
+        <KeyBinding Command="{x:Static local:Commands.CmdMnuHelpAbout}" Key="F1"/>
         <KeyBinding Command="{x:Static local:Commands.CmdMainGUIEsc}" Key="Esc"/>
-        
     </Window.InputBindings>
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static local:Commands.CmdMnuFileKeyMgr}" Executed="MnuFileKeyMgr_Command"/>
         <CommandBinding Command="{x:Static local:Commands.CmdMnuFileQuit}" Executed="MnuFileQuit_Command"/>
+        <CommandBinding Command="{x:Static local:Commands.CmdMnuHelpAbout}" Executed="MnuHelpAbout_Command"/>
         <CommandBinding Command="{x:Static local:Commands.CmdMainGUIEsc}" Executed="MainGUI_EscCommand"/>
     </Window.CommandBindings>
 
@@ -33,7 +34,7 @@
                 <MenuItem x:Name="MnuOptionsCloseToTray" Header="_Enable Close to Tray" IsCheckable="true" IsChecked="True" Click="MnuOptionsCloseToTray_Click"/>
             </MenuItem>
             <MenuItem x:Name="MnuHelp" Header="_Help" Height="22" Width="43" IsTabStop="False">
-                <MenuItem x:Name="MnuHelpAbout" Header="_About" InputGestureText="F1" IsEnabled="False"/>
+                <MenuItem x:Name="MnuHelpAbout" Header="_About" InputGestureText="F1" Click="MnuHelpAbout_Click"/>
             </MenuItem>
         </Menu>
         <ToggleButton x:Name="BtnReveal" Content="_Show" HorizontalAlignment="Left" Height="32" Margin="13,34,0,0" VerticalAlignment="Top" Width="42" Click="BtnReveal_Click" IsEnabled="False"/>
