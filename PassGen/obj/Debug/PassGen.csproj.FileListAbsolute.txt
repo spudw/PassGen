@@ -39,3 +39,4 @@ C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Debug\PassGen.ex
 C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Debug\PassGen.application
 C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Debug\PassGen.exe
 C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Debug\PassGen.pdb
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Debug\PassGen.csproj.AssemblyReference.cache

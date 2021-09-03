@@ -6,6 +6,23 @@
         xmlns:local="clr-namespace:PassGen"
         mc:Ignorable="d"
         Title="PassGen Key Manager" Height="400" Width="330" MinWidth="330" MinHeight="250" MaxWidth="330" MaxHeight="650" Closing="KeyManager_Closing" WindowStartupLocation="CenterScreen" Background="#FFF0F0F0" Deactivated="KeyManager_Deactivated" Activated="KeyManager_Activated" ResizeMode="NoResize" WindowStyle="ToolWindow">
+    <Window.InputBindings>
+        <KeyBinding Command="{x:Static local:Commands.CmdMnuFileAdd}" Modifiers="Control" Key="N"/>
+        <KeyBinding Command="{x:Static local:Commands.CmdMnuFileClose}" Modifiers="Control" Key="X"/>
+        <KeyBinding Command="{x:Static local:Commands.CmdMnuEditRemoveSelected}" Modifiers="Shift" Key="Delete"/>
+        <KeyBinding Command="{x:Static local:Commands.CmdMnuEditSelectAll}" Modifiers="Control" Key="A"/>
+        <KeyBinding Command="{x:Static local:Commands.CmdMnuEditDeselectAll}" Modifiers="Control" Key="D"/>
+        <KeyBinding Command="{x:Static local:Commands.CmdMnuViewShowKeys}" Modifiers="Control" Key="S"/>
+    </Window.InputBindings>
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static local:Commands.CmdMnuFileAdd}" Executed="MnuFileAdd_Command"/>
+        <CommandBinding Command="{x:Static local:Commands.CmdMnuFileClose}" Executed="MnuFileClose_Command"/>
+        <CommandBinding Command="{x:Static local:Commands.CmdMnuEditRemoveSelected}" Executed="MnuEditRemoveSelected_Command"/>
+        <CommandBinding Command="{x:Static local:Commands.CmdMnuEditSelectAll}" Executed="MnuEditSelectAll_Command"/>
+        <CommandBinding Command="{x:Static local:Commands.CmdMnuEditDeselectAll}" Executed="MnuEditDeselectAll_Command"/>
+        <CommandBinding Command="{x:Static local:Commands.CmdMnuViewShowKeys}" Executed="MnuViewShowKeys_Command"/>
+        <CommandBinding Command="{x:Static local:Commands.CmdKeyMgrEsc}" Executed="KeyManager_EscCommand"/>
+    </Window.CommandBindings>
     <Grid Margin="0,0,0,-18">
         <Menu HorizontalAlignment="Left" Height="23" VerticalAlignment="Top" Width="322" Background="White">
             <MenuItem Header="_File" Height="23" Width="38" IsTabStop="False" SubmenuOpened="MnuFile_Click">
@@ -14,19 +31,19 @@
                 <MenuItem x:Name="MnuFileImport" Header="_Import Key Archive" HorizontalAlignment="Left" Height="23" Width="230" Margin="0,0,0,0" InputGestureText="Ctrl+I" IsEnabled="False"/>
                 <MenuItem x:Name="MnuFileExport" Header="_Export Key Archive" HorizontalAlignment="Left" Height="23" Width="230" Margin="0,0,0,0" InputGestureText="Ctrl+E" IsEnabled="False"/>
                 <Separator HorizontalAlignment="Left" Height="0" Width="230"/>
-                <MenuItem x:Name="MnuFileClose" Header="_Close" HorizontalAlignment="Left" Height="23" Width="230" Margin="0,0,0,0" Click="MnuFileClose_Click" InputGestureText="Ctrl+X"/>
+                <MenuItem x:Name="MnuFileClose" Header="_Close Key Manager" HorizontalAlignment="Left" Height="23" Width="230" Margin="0,0,0,0" Click="MnuFileClose_Click" InputGestureText="Esc"/>
             </MenuItem>
             <MenuItem x:Name="MnuEdit" Header="_Edit" Height="23" Width="41" IsTabStop="False" SubmenuOpened="MnuEdit_Click">
-                <MenuItem x:Name="MnuEditRemoveSelected" Header="_Remove Selected Key(s)" HorizontalAlignment="Left" Height="23" Width="250" Margin="0,0,0,0" IsEnabled="false" Click="MnuEditRemoveSelected_Click" InputGestureText="Del"/>
-                <Separator HorizontalAlignment="Left" Height="0" Width="210"/>
-                <MenuItem x:Name="MnuEditSelectAll" Header="_Select All" HorizontalAlignment="Left" Height="23" Width="250" Margin="0,0,0,0" IsEnabled="false" Click="MnuEditSelectAll_Click" InputGestureText="Ctrl+A"/>
-                <MenuItem x:Name="MnuEditDeselectAll" Header="_Deselect All" HorizontalAlignment="Left" Height="23" Width="250" Margin="0,0,0,0" IsEnabled="false" Click="MnuEditDeselectAll_Click" InputGestureText="Ctrl+D"/>
+                <MenuItem x:Name="MnuEditRemoveSelected" Header="_Remove Selected Key(s)" HorizontalAlignment="Left" Height="23" Width="260" Margin="0,0,0,0" IsEnabled="false" Click="MnuEditRemoveSelected_Click" InputGestureText="Shift+Del"/>
+                <Separator HorizontalAlignment="Left" Height="0" Width="240"/>
+                <MenuItem x:Name="MnuEditSelectAll" Header="_Select All" HorizontalAlignment="Left" Height="23" Width="260" Margin="0,0,0,0" IsEnabled="false" Click="MnuEditSelectAll_Click" InputGestureText="Ctrl+A"/>
+                <MenuItem x:Name="MnuEditDeselectAll" Header="_Deselect All" HorizontalAlignment="Left" Height="23" Width="260" Margin="0,0,0,0" IsEnabled="false" Click="MnuEditDeselectAll_Click" InputGestureText="Ctrl+D"/>
             </MenuItem>
             <MenuItem Header="_View" Height="23" Width="45" IsTabStop="False" SubmenuOpened="MnuView_Click">
                 <MenuItem x:Name="MnuViewShowKeys" Header="_Show Key(s)" HorizontalAlignment="Left" Height="23" Width="180" Margin="0,0,0,0" IsCheckable="True" InputGestureText="Ctrl+S" IsEnabled="False" Click="MnuViewShowKeys_Click"/>
             </MenuItem>
         </Menu>
-        <ListView x:Name="KeyManagerListView" Margin="4,24,4,68" ScrollViewer.HorizontalScrollBarVisibility="Disabled" GridViewColumnHeader.Click="KeyManagerListView_Sort">
+        <ListView x:Name="KeyManagerListView" Margin="4,24,4,68" ScrollViewer.HorizontalScrollBarVisibility="Disabled" GridViewColumnHeader.Click="KeyManagerListView_KeyDateHeaderClick">
             <ListView.Resources>
                 <ContextMenu x:Key="ItemContextMenu">
                     <MenuItem Header="Set as _Active Key" CommandParameter="{Binding ElementName=KeyManagerListView, Path=SelectedItem}" />
@@ -96,7 +113,7 @@
             </ListView.View>
         </ListView>
         <Button x:Name="BtnCancel" Content="_Cancel" Margin="10,0,174,28" VerticalAlignment="Bottom" Height="32" Click="BtnCancel_Click"/>
-        <Button x:Name="BtnSave" Content="_Save" Margin="174,0,10,28" VerticalAlignment="Bottom" Height="32" IsEnabled="False" Click="BtnSave_Click"/>
+        <Button x:Name="BtnSave" Content="_Save" Margin="174,0,10,28" VerticalAlignment="Bottom" Height="32" IsEnabled="False" Click="BtnSave_Click" IsDefault="True"/>
         <Canvas x:Name="TempEditControlCanvas">
             <DatePicker x:Name="KeyDateEditCtrl" Width="90" Height="18" Visibility="Hidden" CalendarClosed="KeyDateEditCtrl_CalendarClosed"/>
             <TextBox x:Name="KeyValueEditCtrl" Width="159" Height="19" BorderThickness="1" Visibility="Hidden" Background="LightYellow"  TextChanged="KeyValueEditCtrl_TextChanged" KeyDown="KeyValueEditCtrl_KeyDown" LostFocus="KeyValueEditCtrl_LostFocus"/>

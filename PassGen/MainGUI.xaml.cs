@@ -25,12 +25,12 @@ namespace PassGen
             //MessageBox.Show("Application Starting\nArgument Count: " + e.Args.Length);
         }
     }
-    
+
     public partial class MainGUI : Window
     {
         private System.Windows.Forms.NotifyIcon NotifyIcon;
         Window WinKeyMgr = new KeyManager();
-        const string sVersion = "0.1.20210902";
+        const string sVersion = "0.1.20210903";
         const string sTitle = "PassGen v" + sVersion;
         //const string sTitle = "PassGen";
         const string sEmptyPasshrase = "Type Passphrase Here";
@@ -47,7 +47,7 @@ namespace PassGen
             PassGen_NotifyIconInit();
             PassGen_CloseToTrayInit();
             PassGen_LoadCurrentKey();
-            PassGen_HotKeysInit();
+            if (PasswdKey_Read()!=null) { Passphrase_SetStyle(1); }
         }
 
         #region GUI Event Logic
@@ -76,11 +76,7 @@ namespace PassGen
             if (MnuOptionsCloseToTray.IsChecked == true)
             {
                 e.Cancel = true;
-                this.WindowState = WindowState.Minimized;
-                this.Hide();
-                PassGen.ShowInTaskbar = false;
-                NotifyIcon.Visible = true;
-                NotifyIcon.ShowBalloonTip(3500);
+                PassGen_MinimizeToTray();
             }
         }
 
@@ -88,6 +84,7 @@ namespace PassGen
         {
             BtnReveal_Checked(false);
             MaskKey();
+            MaskPassword();
         }
         #endregion
 
@@ -216,7 +213,11 @@ namespace PassGen
 
         private string TxtPassphrase_Read()
         {
-            return TxtPassphrase.Text;
+            //if (TxtPassphrase.Text.Length > 0)
+            //{
+                return TxtPassphrase.Text.Trim();
+            //}
+            //return null;
         }
 
         private string TxtPassword_Read()
@@ -239,7 +240,6 @@ namespace PassGen
         private void BtnKeyMgr_Click(object sender, RoutedEventArgs e)
         {
             OpenKeyManager();
-            PassGenFuncs.KeyReadCurrent();
         }
         
         private void BtnPassphraseCopy_Click(object sender, RoutedEventArgs e)
@@ -266,8 +266,7 @@ namespace PassGen
 
         private void MnuFileQuit_Click(object sender, RoutedEventArgs e)
         {
-            MnuOptionsCloseToTray.IsChecked = false;
-            this.Close();
+            CloseApp();
         }
 
         private void MnuOptionsAutoStart_Click(object sender, RoutedEventArgs e)
@@ -298,23 +297,11 @@ namespace PassGen
 
         private void TxtPassphrase_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string sPassphraseText = TxtPassphrase_Read().Trim();
+            string sPassphraseText = TxtPassphrase_Read();
             int iPassphraseTextLen = sPassphraseText.Length;
-            if (iPassphraseTextLen >= 8 && sPassphraseText != sEmptyPasshrase)
+            if (iPassphraseTextLen >= 8 && sPassphraseText != sEmptyPasshrase && sPassphraseText != "")
             {
-                string KeyText = PasswdKey_Read();
-                string Password = PassGenFuncs.GeneratePassword(KeyText, sPassphraseText);
-                PasswdPassword_Set(Password);
-                TxtPassword_Set(Password);
-                PasswdPassword_Enable();
-                BtnPassphraseCopy_Enable();
-                BtnPasswordCopy_Enable();
-                CopyPassword();
-                aTimer.IsEnabled = false;
-                aTimer.Stop();
-                aTimer.Interval = TimeSpan.FromMinutes(iAutoPurgeTimerValue);
-                aTimer.Start();
-                aTimer.IsEnabled = true;
+                PassGen_GeneratePassword();
             }
             else if (iPassphraseTextLen < 8)
             {
@@ -465,15 +452,16 @@ namespace PassGen
                 TxtKey_Set(CurrentKey);
                 PasswdKey_Set(CurrentKey);
                 BtnReveal_Enable();
-                Passphrase_SetStyle(1);
+                //Passphrase_SetStyle(1);
                 TxtPassphrase_Enable();
+                PassGen_GeneratePassword();
             }
             else
             {
                 TxtKey_Set(null);
                 PasswdKey_Set(null);
                 BtnReveal_Enable(false);
-                Passphrase_SetStyle(0);
+                //Passphrase_SetStyle(0);
                 TxtPassphrase_Enable(false);
             }
         }
@@ -500,7 +488,7 @@ namespace PassGen
 
             LblPassphraseMsg_SetText(null);
             LblPasswordMsg_SetText(null);
-
+            
             if (iStyle == 1)
             {
                 TxtPassphrase.Text = sEmptyPasshrase;
@@ -521,12 +509,59 @@ namespace PassGen
         }
         #endregion
 
-        private void PassGen_HotKeysInit()
+        private void MnuFileKeyMgr_Command(object sender, EventArgs e)
         {
-            //MnuFileKeyMgr.CommandBindings.Add(new CommandBinding(new RoutedCommand() );
-            //CommandBindings.Add(new CommandBinding(new RoutedCommand() { InputGestures = { gesture } }, (o, e) => action()));
-            //cmdSettings.InputGestures.Add(new KeyGesture(Key.M, ModifierKeys.Control)); CommandBindings.Add(new CommandBinding(cmdSettings, MnuFileKeyMgr_Click));
-            //cmdSettings.InputGestures.Add(new KeyGesture(Key.Q, ModifierKeys.Control)); CommandBindings.Add(new CommandBinding(cmdSettings, MnuFileQuit_Click));
+            //if (MnuFileKeyMgr.IsEnabled == false) { return; }
+            OpenKeyManager();
+        }
+
+        private void MnuFileQuit_Command(object sender, EventArgs e)
+        {
+            CloseApp();
+        }
+        private void CloseApp()
+        {
+            MnuOptionsCloseToTray.IsChecked = false;
+            this.Close();
+        }
+
+        private void MainGUI_EscCommand(object sender, RoutedEventArgs e)
+        {
+            if (MnuOptionsCloseToTray.IsChecked == true)
+            {
+                PassGen_MinimizeToTray();
+            }
+        }
+
+        private void PassGen_MinimizeToTray()
+        {
+            this.WindowState = WindowState.Minimized;
+            this.Hide();
+            PassGen.ShowInTaskbar = false;
+            NotifyIcon.Visible = true;
+            NotifyIcon.ShowBalloonTip(3500);
+        }
+
+        private void PassGen_GeneratePassword()
+        {
+            string KeyText = PasswdKey_Read();
+            string PassphraseText = TxtPassphrase_Read();
+            if (KeyText == null) { return; }
+            if (PassphraseText.Length < 8) { return; }
+            if (PassphraseText == sEmptyPasshrase || PassphraseText == "") { return; }
+            string Password = PassGenFuncs.GeneratePassword(KeyText, PassphraseText);
+            if (PasswdPassword_Read() == Password) { return; }
+            PasswdPassword_Set(Password);
+            TxtPassword_Set(Password);
+            PasswdPassword_Enable();
+            BtnPassphraseCopy_Enable();
+            BtnPasswordCopy_Enable();
+            CopyPassword();
+            aTimer.IsEnabled = false;
+            aTimer.Stop();
+            aTimer.Interval = TimeSpan.FromMinutes(iAutoPurgeTimerValue);
+            aTimer.Start();
+            aTimer.IsEnabled = true;
         }
     }
 }

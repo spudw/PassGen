@@ -4,13 +4,24 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PassGen"
-        xmlns:commands="clr-namespace:PassGen"
-        mc:Ignorable="d"
         Title="PassGen" Height="282" Width="527" ResizeMode="CanMinimize" Background="#FFF0F0F0" WindowStartupLocation="CenterScreen" Closed="PassGen_Closed" Closing="PassGen_Closing" Deactivated="PassGen_Deactivated" Activated="PassGen_Activated">
+
+    <Window.InputBindings>
+        <KeyBinding Command="{x:Static local:Commands.CmdMnuFileKeyMgr}" Modifiers="Control" Key="M"/>
+        <KeyBinding Command="{x:Static local:Commands.CmdMnuFileQuit}" Modifiers="Control" Key="Q"/>
+        <KeyBinding Command="{x:Static local:Commands.CmdMainGUIEsc}" Key="Esc"/>
+        
+    </Window.InputBindings>
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static local:Commands.CmdMnuFileKeyMgr}" Executed="MnuFileKeyMgr_Command"/>
+        <CommandBinding Command="{x:Static local:Commands.CmdMnuFileQuit}" Executed="MnuFileQuit_Command"/>
+        <CommandBinding Command="{x:Static local:Commands.CmdMainGUIEsc}" Executed="MainGUI_EscCommand"/>
+    </Window.CommandBindings>
+
     <Grid Margin="0,0,0,0">
         <Menu x:Name="MnuBar" HorizontalAlignment="Left" Height="22" VerticalAlignment="Top" Width="524" Background="White" Margin="0,0,-3,0">
             <MenuItem x:Name="MnuFile" Header="_File" Height="22" Width="36" IsTabStop="False">
-                <MenuItem x:Name="MnuFileKeyMgr" Header="Open Key _Manager" InputGestureText="Ctrl+M" Click="BtnKeyMgr_Click"/>
+                <MenuItem x:Name="MnuFileKeyMgr" Header="Open Key _Manager" InputGestureText="Ctrl+M" Click="MnuFileKeyMgr_Click" IsEnabled="False"/>
                 <Separator/>
                 <MenuItem x:Name="MnuFileImport" Header="_Import Key Archive" Command="New" InputGestureText="Ctrl+I" IsEnabled="False"/>
                 <MenuItem x:Name="MnuFileExport" Header="_Export Key Archive" Command="New" InputGestureText="Ctrl+E" IsEnabled="False"/>

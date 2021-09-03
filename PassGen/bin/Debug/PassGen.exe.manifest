@@ -43,14 +43,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PassGen.exe" size="79872">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PassGen.exe" size="82944">
       <assemblyIdentity name="PassGen" version="0.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>RNURAwXZDc7lyDdSzE5DOFqdOvLjwG/bWj10wL7h6vQ=</dsig:DigestValue>
+        <dsig:DigestValue>Bkp6YuA1lXYQoJu6ZhAiqY9FZZ/bRDzD3NWfAknvYPY=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -63,13 +63,19 @@
       <dsig:DigestValue>np7LgAfheA01Eul7rMLNS14zK+RGtf03oYKwX4VSs+M=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="PassGen.exe.config" size="189">
+  <file name="PassGen.exe.config" size="191">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>rl5/qDc7Jz+tB+BIbOv9iMGPlRe6YJwrjmU09dnlPcs=</dsig:DigestValue>
+      <dsig:DigestValue>4q2BQtcbX8ptJN+9LXY6sVdso2/u0PM67TilTlDhEHU=</dsig:DigestValue>
     </hash>
   </file>
+  <application xmlns="urn:schemas-microsoft-com:asm.v3">
+    <windowsSettings>
+      <dpiAwareness xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">PerMonitor</dpiAwareness>
+      <dpiAware xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true</dpiAware>
+    </windowsSettings>
+  </application>
 </asmv1:assembly>

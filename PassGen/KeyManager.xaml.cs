@@ -25,11 +25,13 @@ namespace PassGen
         int iActiveItemIndex = -1;
         ToolTip toolTip = new ToolTip();
         CollectionView view;
+        bool EditClosing = false;
         bool ChangesMade = false;
         ListSortDirection KeyManagerListViewSortDirection = ListSortDirection.Descending;
         public KeyManager()
         {
             InitializeComponent();
+            KeyManager_EscCommandEnabled();
         }
 
         #region GUI Event Logic
@@ -131,7 +133,7 @@ namespace PassGen
 
         private void MnuFileClose_Click(object sender, RoutedEventArgs e)
         {
-            KeyManager_Hide();
+            BtnCancel_Click(sender, e);
         }
 
         private void MnuView_Click(object sender, RoutedEventArgs e)
@@ -147,6 +149,19 @@ namespace PassGen
             BtnSave_Enable(bFlag);
         }
         
+        private void KeyManagerListView_KeyDateHeaderClick(object sender, RoutedEventArgs e)
+        {
+            if (KeyManagerListViewSortDirection == ListSortDirection.Descending)
+            {
+                KeyManagerListViewSortDirection = ListSortDirection.Ascending;
+            }
+            else
+            {
+                KeyManagerListViewSortDirection = ListSortDirection.Descending;
+            }
+            KeyManagerListView_Sort();
+        }
+
         private void KeyManagerListView_RemoveSelected()
         {
             var oSelectedItems = new List<KeyManagerListViewItemData>();
@@ -177,16 +192,8 @@ namespace PassGen
             }
         }
 
-        private void KeyManagerListView_Sort(object sender, RoutedEventArgs e)
+        private void KeyManagerListView_Sort()
         {
-            if (KeyManagerListViewSortDirection == ListSortDirection.Descending)
-            {
-                KeyManagerListViewSortDirection = ListSortDirection.Ascending;
-            }
-            else
-            {
-                KeyManagerListViewSortDirection = ListSortDirection.Descending;
-            }
             KeyManagerListView.Items.SortDescriptions.Clear();
             KeyManagerListView.Items.SortDescriptions.Add(new SortDescription("KeyDate", KeyManagerListViewSortDirection));
             KeyManagerListView.Items.Refresh();
@@ -257,6 +264,7 @@ namespace PassGen
                 Modified = bModified,
                 Deleted = bDeleted
             });
+            KeyManagerListView_Sort();
             KeyManagerListView_ChangesMade();
         }
 
@@ -278,7 +286,8 @@ namespace PassGen
                 }
             }
             oKey.Close();
-            KeyManagerListView.Items.SortDescriptions.Add(new SortDescription("KeyDate", ListSortDirection.Descending));
+            KeyManagerListViewSortDirection = ListSortDirection.Descending;
+            KeyManagerListView_Sort();
             KeyManagerListView_ChangesMade(false);
         }
 
@@ -330,6 +339,7 @@ namespace PassGen
 
         private void KeyDateEdit(object sender)
         {
+            KeyManager_EscCommandEnabled(false);
             TextBox oTextBox = sender as TextBox;
             Point relativePoint = oTextBox.TransformToAncestor(Application.Current.MainWindow).Transform(new Point(0, 0));
             ListViewItem oItem = FindVisualParent<ListViewItem>(sender as TextBox);
@@ -343,6 +353,7 @@ namespace PassGen
 
         private void KeyValueEdit(object sender)
         {
+            KeyManager_EscCommandEnabled(false);
             TextBox oTextBox = sender as TextBox;
             Point relativePoint = oTextBox.TransformToAncestor(Application.Current.MainWindow).Transform(new Point(0, 0));
             ListViewItem oItem = FindVisualParent<ListViewItem>(sender as TextBox);
@@ -367,6 +378,7 @@ namespace PassGen
 
         private void KeyDateEditCtrl_CalendarClosed(object sender, RoutedEventArgs e)
         {
+            KeyManager_EscCommandEnabled();
             if (iActiveItemIndex == -1) { return; }
             var oItem = KeyManagerListView.Items.GetItemAt(iActiveItemIndex) as KeyManagerListViewItemData;
             string sCurrentDate = oItem.KeyDate;
@@ -380,7 +392,7 @@ namespace PassGen
                 KeyManagerListView.Items.Refresh();
             }
             iActiveItemIndex = -1;
-            KeyManagerListView.Items.SortDescriptions.Add(new SortDescription("KeyDate", KeyManagerListViewSortDirection));
+            KeyManagerListView_Sort();
         }
 
         private void KeyValueEditCtrl_KeyDown(object sender, KeyEventArgs e)
@@ -389,6 +401,7 @@ namespace PassGen
             if (key == Key.Escape)
             {
                 KeyValueEdit_Cancel();
+                return;
             }
             else if (key == Key.Return)
             {
@@ -419,9 +432,11 @@ namespace PassGen
 
         private void KeyValueEdit_Cancel()
         {
+            EditClosing = true;
             toolTip.IsOpen = false;
             iActiveItemIndex = -1;
             KeyValueEditCtrl.Visibility = Visibility.Hidden;
+            KeyManager_EscCommandEnabled();
         }
 
         private bool KeyValueEdit_IsKeyComplex(string sKeyValue, TextBox oTextBox)
@@ -448,6 +463,7 @@ namespace PassGen
             toolTip.IsOpen = false;
             iActiveItemIndex = -1;
             KeyValueEditCtrl.Visibility = Visibility.Hidden;
+            KeyManager_EscCommandEnabled();
         }
 
         private void KeyValueEditCtrl_TextChanged(object sender, TextChangedEventArgs e)
@@ -461,14 +477,8 @@ namespace PassGen
             }
         }
 
-        private void ListView_KeyDateMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            Console.WriteLine(e.LeftButton);
-        }
-
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
-            
             KeyManagerListView.Items.Filter = null;
             foreach (KeyManagerListViewItemData oItem in KeyManagerListView.Items){
                 if (oItem.Deleted == true)
@@ -487,24 +497,66 @@ namespace PassGen
                 {
                     PassGenFuncs.KeySetActive(oItem.KeyGUID);
                 }
-                Console.WriteLine(oItem.KeyGUID + "|Modified:" + oItem.Modified + "|Deleted:" + oItem.Deleted);
+                //Console.WriteLine(oItem.KeyGUID + "|Modified:" + oItem.Modified + "|Deleted:" + oItem.Deleted);
             }
             KeyManagerListView_ChangesMade(false);
             KeyManager_Hide();
         }
-    }
 
-    public static class KeyManagerCommands
-    {
-        public static readonly RoutedUICommand AddKey = new RoutedUICommand(
-            "AddKey",
-            "AddKey",
-            typeof(KeyManagerCommands),
-            new InputGestureCollection()
+        private void MnuFileAdd_Command(object sender, RoutedEventArgs e)
+        {
+            MnuFileAdd_Click(sender, e);
+        }
+
+        private void MnuFileClose_Command(object sender, RoutedEventArgs e)
+        {
+            MnuFileClose_Click(sender, e);
+        }
+
+        private void MnuEditRemoveSelected_Command(object sender, RoutedEventArgs e)
+        {
+            KeyManagerListView_RemoveSelected();
+        }
+        private void MnuEditSelectAll_Command(object sender, RoutedEventArgs e)
+        {
+            KeyManagerListView_SelectAll();
+        }
+        private void MnuEditDeselectAll_Command(object sender, RoutedEventArgs e)
+        {
+            KeyManagerListView_SelectAll(false);
+        }
+
+        private void MnuViewShowKeys_Command(object sender, RoutedEventArgs e)
+        {
+            if (MnuViewShowKeys.IsChecked == true) 
             {
-                new KeyGesture(Key.N, ModifierKeys.Control)
+                MnuViewShowKeys.IsChecked = false;
             }
-        );
+            else
+            {
+                MnuViewShowKeys.IsChecked = true;
+            }
+            KeyManager_MaskListView(MnuViewShowKeys.IsChecked);
+        }
+
+        private void KeyManager_EscCommandEnabled(bool bFlag = true)
+        {
+            Commands.CmdKeyMgrEsc.InputGestures.Clear();
+            if (bFlag == true)
+            {
+                Commands.CmdKeyMgrEsc.InputGestures.Add(new KeyGesture(Key.Escape));
+            }
+        }
+
+        private void KeyManager_EscCommand(object sender, RoutedEventArgs e)
+        {
+            if (EditClosing == true)
+            {
+                EditClosing = false;
+                return;
+            }
+            BtnCancel_Click(sender, e);
+        }
     }
 
     public class KeyManagerListViewItemData

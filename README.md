@@ -68,4 +68,4 @@ Multiple parties need to exchange information securely via encrypted email attac
 </ul>
 
 ## Development Log - To-Do
-Listed in no particular priority: Hotkeys, Autostart, About, Import / Export, Singleton / Mutex, Code Cleanup, Commandline Arguments Prep & Design, 7-zip integration
+Listed in no particular priority: Autostart, About, Import / Export, Singleton / Mutex, Code Cleanup, Commandline Arguments Prep & Design, 7-zip integration

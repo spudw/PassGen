@@ -20,3 +20,11 @@ C:\Users\Spudw\source\repos\PassGen\PassGen\obj\Release\PassGen.exe.manifest
 C:\Users\Spudw\source\repos\PassGen\PassGen\obj\Release\PassGen.application
 C:\Users\Spudw\source\repos\PassGen\PassGen\bin\Release\PassGen.exe.CodeAnalysisLog.xml
 C:\Users\Spudw\source\repos\PassGen\PassGen\bin\Release\PassGen.exe.lastcodeanalysissucceeded
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Release\PassGen.csproj.AssemblyReference.cache
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Release\KeyManager.g.cs
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Release\MainGUI.g.cs
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Release\App.g.cs
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Release\PassGen_MarkupCompile.cache
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Release\PassGen_MarkupCompile.lref
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Release\PassGen.exe
+C:\Users\Spudw\Google Drive\c#\source\repos\PassGen\PassGen\obj\Release\PassGen.pdb

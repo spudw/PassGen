@@ -1,0 +1,5 @@
+001[closed]-Passphrase and Password Clear upon Window Active
+	Need to change SetStyle logic
+002[closed]-Password doesn't mask on Windows Inactive
+003[closed]-Restore from tray issue, likely tied to bug 011, 
+    passphrase focused does clear or set style
