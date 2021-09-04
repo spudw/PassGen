@@ -22,7 +22,7 @@
     <Grid Margin="0,0,0,0">
         <Menu x:Name="MnuBar" HorizontalAlignment="Left" Height="22" VerticalAlignment="Top" Width="524" Background="White" Margin="0,0,-3,0">
             <MenuItem x:Name="MnuFile" Header="_File" Height="22" Width="36" IsTabStop="False">
-                <MenuItem x:Name="MnuFileKeyMgr" Header="Open Key _Manager" InputGestureText="Ctrl+M" Click="MnuFileKeyMgr_Click" IsEnabled="False"/>
+                <MenuItem x:Name="MnuFileKeyMgr" Header="Open Key _Manager" InputGestureText="Ctrl+M" Click="MnuFileKeyMgr_Click"/>
                 <Separator/>
                 <MenuItem x:Name="MnuFileImport" Header="_Import Key Archive" Command="New" InputGestureText="Ctrl+I" IsEnabled="False"/>
                 <MenuItem x:Name="MnuFileExport" Header="_Export Key Archive" Command="New" InputGestureText="Ctrl+E" IsEnabled="False"/>
@@ -30,7 +30,7 @@
                 <MenuItem x:Name="MnuFileQuit" Header="_Quit" InputGestureText="Ctrl+Q" Click="MnuFileQuit_Click"/>
             </MenuItem>
             <MenuItem x:Name="MnuOptions" Header="_Options" Height="22" Width="60" IsTabStop="False">
-                <MenuItem x:Name="MnuOptionsAutoStart" Header="_Automatic Start on Login" IsCheckable="true" Click="MnuOptionsAutoStart_Click" IsEnabled="False"/>
+                <MenuItem x:Name="MnuOptionsAutoStart" Header="_Automatic Start on Login" IsCheckable="true" Click="MnuOptionsAutoStart_Click"/>
                 <MenuItem x:Name="MnuOptionsCloseToTray" Header="_Enable Close to Tray" IsCheckable="true" IsChecked="True" Click="MnuOptionsCloseToTray_Click"/>
             </MenuItem>
             <MenuItem x:Name="MnuHelp" Header="_Help" Height="22" Width="43" IsTabStop="False">

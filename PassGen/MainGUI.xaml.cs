@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.IO;
 using System.Windows;
 using System.Windows.Threading;
 using System.Windows.Controls;
@@ -15,16 +16,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
+using System.Runtime.InteropServices;
+
 
 namespace PassGen
 {
-    public partial class App : Application
-    {
-        private void Application_Startup(object sender, StartupEventArgs e)
-        {
-            //MessageBox.Show("Application Starting\nArgument Count: " + e.Args.Length);
-        }
-    }
+    
 
     public partial class MainGUI : Window
     {
@@ -32,7 +29,7 @@ namespace PassGen
         Window WinKeyMgr = new KeyManager();
         Window AboutBox = new AboutBox();
         string sVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        const string sTitle = "PassGen";
+        public const string sTitle = "PassGen";
         const string sEmptyPasshrase = "Type Passphrase Here";
         const string sPassphraseIsTooShort = "Passphrase is too short.\r\nMust contain at least 8 characters.";
         const string sCopiedToClipboard = "Copied to clipboard.";
@@ -42,17 +39,20 @@ namespace PassGen
         public MainGUI()
         {
             InitializeComponent();
-            PassGen.Title = sTitle + " v" + sVersion;
+            PassGen.Title = sTitle;
             aTimer.Tick += AutoPurge;
             PassGen_NotifyIconInit();
             PassGen_CloseToTrayInit();
             PassGen_LoadCurrentKey();
             if (PasswdKey_Read()!=null) { Passphrase_SetStyle(1); }
+            PassGen_AutoStartInit();
         }
 
         #region GUI Event Logic
         private void PassGen_Activated(object sender, EventArgs e)
         {
+            PassGen_RestoreFromTray();
+            this.Show();
             if (WinKeyMgr.IsVisible) 
             {
                 WinKeyMgr.Activate();
@@ -271,7 +271,8 @@ namespace PassGen
 
         private void MnuOptionsAutoStart_Click(object sender, RoutedEventArgs e)
         {
-
+            GUIAutoStartEnable(MnuOptionsAutoStart.IsChecked);
+            PassGen_AutoStartEnable(MnuOptionsAutoStart.IsChecked);
         }
 
         private void MnuOptionsCloseToTray_Click(object sender, RoutedEventArgs e)
@@ -390,6 +391,12 @@ namespace PassGen
             oKey.Close();
             return (Value == null) ? false : true;
         }
+        private void GUIAutoStartEnable(bool bFlag = true)
+        {
+            RegistryKey oKey = PassGenFuncs.RegistryOpen(true);
+            oKey.SetValue("AutoStart", (bFlag == true) ? 1 : 0);
+            oKey.Close();
+        }
 
         private void MaskPassword(bool bFlag = true)
         {
@@ -417,11 +424,7 @@ namespace PassGen
 
         private void NotifyIcon_ContextMenuOpen(object sender, EventArgs e)
         {
-            this.Show();
-            this.ShowInTaskbar = true;
-            this.WindowState = WindowState.Normal;
-            this.Activate();
-            NotifyIcon.Visible = false;
+            PassGen_RestoreFromTray();
         }
 
         private void NotifyIcon_ContextMenuQuit(object sender, EventArgs e)
@@ -437,6 +440,43 @@ namespace PassGen
                 //WinKeyMgr.Show();
                 WinKeyMgr.ShowDialog();
             }
+        }
+
+        private void PassGen_AutoStartEnable(bool bFlag = true)
+        {
+            string sTargetExe = App.sInstallPath + App.sProcName;
+            string sStartupLnkPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup) + @"\PassGen.lnk";
+            string sStartMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
+            string sStartMenuLnkPath = sStartMenuPath + @"\Programs\PassGen\PassGen.lnk";
+            if (bFlag == true)
+            {
+                if (App.sExePath != App.sInstallPath)
+                {
+                    Directory.CreateDirectory(App.sInstallPath);
+                    File.Copy(App.sExePath, sTargetExe, true);
+                }
+                Directory.CreateDirectory(sStartMenuPath);
+                CreateShortcut(sStartupLnkPath, sTargetExe, @"/silent");
+                CreateShortcut(sStartMenuLnkPath, sTargetExe);
+            }
+            else
+            {
+                File.Delete(sStartupLnkPath);
+            }
+        }
+
+
+        private void PassGen_AutoStartInit()
+        {
+            if (PassGen_AutoStartIsEnabled()) { MnuOptionsAutoStart.IsChecked = true; }
+            if (App.SILENTSTART) { PassGen_MinimizeToTray(); }
+        }
+
+        private bool PassGen_AutoStartIsEnabled()
+        {
+            RegistryKey oKey = PassGenFuncs.RegistryOpen();
+            var Value = oKey.GetValue("AutoStart");
+            return (Value == null || Convert.ToInt32(Value) == 0) ? false : true;
         }
 
         private void PassGen_CloseToTrayInit()
@@ -471,11 +511,11 @@ namespace PassGen
             NotifyIcon = new System.Windows.Forms.NotifyIcon();
             NotifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location);
             NotifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(NotifyIcon_Click);
-            NotifyIcon.Text = "PassGen";
+            NotifyIcon.Text = sTitle;
             NotifyIcon.BalloonTipTitle = "PassGen";
             NotifyIcon.BalloonTipText = "PassGen has moved to the Notification Tray.";
             NotifyIcon.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
-            NotifyIcon.ContextMenuStrip.Items.Add(sTitle).Enabled = false;
+            NotifyIcon.ContextMenuStrip.Items.Add(sTitle + " v" + sVersion).Enabled = false;
             NotifyIcon.ContextMenuStrip.Items.Add("-");
             var Item = NotifyIcon.ContextMenuStrip.Items.Add("Open", null, this.NotifyIcon_ContextMenuOpen);
             Item.Font = new System.Drawing.Font(Item.Font, Item.Font.Style | System.Drawing.FontStyle.Bold);
@@ -539,7 +579,14 @@ namespace PassGen
             this.Hide();
             PassGen.ShowInTaskbar = false;
             NotifyIcon.Visible = true;
-            NotifyIcon.ShowBalloonTip(3500);
+            if (App.SILENTSTART == true)
+            {
+                App.SILENTSTART = false;
+            }
+            else
+            {
+                NotifyIcon.ShowBalloonTip(3500);
+            }
         }
 
         private void PassGen_GeneratePassword()
@@ -572,6 +619,40 @@ namespace PassGen
         private void MnuHelpAbout_Click(object sender, RoutedEventArgs e)
         {
             AboutBox.Show();           
+        }
+
+        private void PassGen_RestoreFromTray()
+        {
+            this.Show();
+            this.ShowInTaskbar = true;
+            this.WindowState = WindowState.Normal;
+            this.Activate();
+            NotifyIcon.Visible = false;
+        }
+
+        private void CreateShortcut(string sLnkPath, string sTargetPath, string sArguments = "")
+        {
+            Type t = Type.GetTypeFromCLSID(new Guid("72C24DD5-D70A-438B-8A42-98424B88AFB8")); //Windows Script Host Shell Object
+            dynamic shell = Activator.CreateInstance(t);
+            try
+            {
+                var lnk = shell.CreateShortcut(sLnkPath);
+                try
+                {
+                    lnk.TargetPath = sTargetPath;
+                    lnk.Arguments = sArguments;
+                    lnk.Save();
+                }
+                finally
+                {
+                    Marshal.FinalReleaseComObject(lnk);
+                }
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(shell);
+            }
+
         }
     }
 }

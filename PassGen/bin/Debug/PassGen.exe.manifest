@@ -4,7 +4,7 @@
   <description asmv2:iconFile="Icon.ico" xmlns="urn:schemas-microsoft-com:asm.v1" />
   <application />
   <entryPoint>
-    <assemblyIdentity name="PassGen" version="0.1.2109.302" language="neutral" processorArchitecture="msil" />
+    <assemblyIdentity name="PassGen" version="0.1.2109.401" language="neutral" processorArchitecture="msil" />
     <commandLine file="PassGen.exe" parameters="" />
   </entryPoint>
   <trustInfo>
@@ -43,14 +43,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PassGen.exe" size="87040">
-      <assemblyIdentity name="PassGen" version="0.1.2109.302" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PassGen.exe" size="90624">
+      <assemblyIdentity name="PassGen" version="0.1.2109.401" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>vOEkWNs3/Bo5YsdFB1gMDAVhLzCjqGoglyAxXcQI0zc=</dsig:DigestValue>
+        <dsig:DigestValue>5APjfencvh7U2an1A9UKtId1Me7UxmHJPV8ZQCz5eeI=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
